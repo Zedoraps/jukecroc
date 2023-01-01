@@ -23,14 +23,18 @@
 </script>
 
 {#if $currentUser}
+
+    <h4>Profil bearbeite</h4>
+    <br>
     <form method="post" on:submit|preventDefault>
-        <label>
-            Username:
+        <div class="field label prefix large border">
+            <i>badge</i>
             <input type="text" name="username" bind:value={username} minlength="3">
-        </label>
+        </div>
         {#if error}
-            <div class="error">
-                <h4>{error}</h4>
+            <div class="toast red white-text active">
+                <i>error</i>
+                <span>{error}</span>
             </div>
         {/if}
         <button type="submit" on:click={update}>
@@ -40,10 +44,3 @@
 {:else}
     am lade
 {/if}
-
-<style>
-    form {
-        display: grid;
-        gap: 1rem;
-    }
-</style>

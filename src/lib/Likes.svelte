@@ -1,6 +1,7 @@
 <script>
     import {currentUser, likes, pb} from "$lib/pocketbase";
     import {onDestroy} from "svelte";
+
     export let videoId;
     let liking = false;
     let likedId = $likes?.find(current => current.video === videoId && current.user === $currentUser.id)?.id
@@ -44,13 +45,16 @@
 <div>
     <span>Pönkt:</span>
     <span class="likes">{$likes?.filter(like => like.video === videoId)?.length}</span>
-    {#if liking}
-        <button disabled>🚫</button>
-    {:else if $likes?.find(current => current.video === videoId && current.user === $currentUser.id)}
-        <button class="inactive" on:click={removeLike}>Nömme so geil 💩</button>
-    {:else}
-        <button on:click={like}>Geil 😎</button>
-    {/if          }
+    <nav>
+        {#if liking}
+            <button disabled>🚫</button>
+        {:else if $likes?.find(current => current.video === videoId && current.user === $currentUser.id)}
+            <button class="border round" on:click={removeLike}>Nömme so geil 💩</button>
+        {:else}
+            <button on:click={like}>Geil 😎</button>
+        {/if           }
+
+    </nav>
 </div>
 
 <style>

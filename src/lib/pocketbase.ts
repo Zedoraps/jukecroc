@@ -16,7 +16,11 @@ export const videos = writable([] as Record[])
 
 pb.collection('likes').getFullList().then(value => likes.set(value))
 
-pb.collection('videos').getList(1, 50, {
-    sort: '-created',
-    expand: 'submitter',
-}).then(result => videos.set(result.items));
+export function loadVideosBySort(sort: string) {
+    pb.collection('videos').getList(1, 50, {
+        sort: sort,
+        expand: 'submitter',
+    }).then(result => videos.set(result.items));
+}
+
+loadVideosBySort("-created");

@@ -46,14 +46,14 @@
                 await fetch("https://noembed.com/embed?url=" + uri)
                     .then(value => value.json())
                     .then(value => preview = value)
-                if(preview?.error){
+                if (preview?.error) {
                     previewError = "Das Video esch ned gfonde worde"
-                }else{
+                } else {
                     title = preview?.title;
                 }
                 loading = false;
 
-            }else{
+            } else {
                 preview = null;
                 loading = false;
             }
@@ -65,26 +65,37 @@
 
 </script>
 
-<h1>Song zo de JukeCroc hinzuefüege</h1>
+<h4>Song zo de JukeCroc hinzuefüege</h4>
+<br>
 {#if $currentUser?.whitelisted}
     <form method="post" on:submit|preventDefault>
-        <label on:input={setPreviewUri}>
-            Youtube URI 🎬:
-            <input type="url" name="uri" bind:value={uri}>
-        </label>
-        <label>
-            Titel:
-            {#if loading}
-                <span class="loading">Luege grad nache wie das Lied heisst</span>
-                {:else if previewError}
-                <span class="loading">{previewError}</span>
-                {:else }
-                <input type="text" name="title" bind:value={title} disabled="{!preview || previewError}">
-                    {/if}
-        </label>
+
+        <div class="field label prefix large border" class:invalid="{previewError}">
+            <i>search</i>
+            <input type="url" name="uri" bind:value={uri} on:input={setPreviewUri}>
+            <label>Youtube URI 🎬</label>
+            {#if previewError}
+                <span class="error">Das Video hani ned chöne fende </span>
+            {/if}
+        </div>
+        {#if loading}
+            <div class="field prefix large border">
+                <a class="loader"></a>
+                <input type="text">
+                <label>Titel</label>
+            </div>
+        {:else }
+            <div class="field label prefix large border">
+                <i>drive_file_rename_outline</i>
+                <input type="text" bind:value={title} disabled="{!preview || previewError}">
+                <label>Titel</label>
+            </div>
+        {/if}
+
         {#if error}
-            <div class="error">
-                <h4>{error}</h4>
+            <div class="toast red white-text active">
+                <i>error</i>
+                <span>{error}</span>
             </div>
         {/if}
         <button type="submit" on:click={add} disabled="{previewError || !title || !uri}">
@@ -97,27 +108,3 @@
         wart bes du vom Ö d'Erlaubnis becho häsch!
     </p>
 {/if}
-
-
-<style>
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    label {
-        display: flex;
-        flex-direction: column;
-    }
-
-    input {
-        height: 1.5rem;
-    }
-
-    .loading {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-    }
-
-</style>
