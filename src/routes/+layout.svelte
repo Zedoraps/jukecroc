@@ -76,10 +76,11 @@
     </nav>
 
     <main class="responsive">
+        <LikeFeed></LikeFeed>
         <slot></slot>
+        <VideoFeed></VideoFeed>
     </main>
-    <LikeFeed></LikeFeed>
-    <VideoFeed></VideoFeed>
+
 {:else }
     <div style="margin: 0 auto; display: block; width: 100px; margin-top: 200px;">
         <a class="loader large"></a>

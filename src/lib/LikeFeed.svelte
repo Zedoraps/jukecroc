@@ -4,17 +4,22 @@
 
     let unsubscribeLikes;
     let text;
+    let icon;
 
     async function displayEvent(action, record) {
         const submitter = await pb.collection('users').getOne(record.user);
         const video = await pb.collection('videos').getOne(record.video);
         if (action === 'create') {
-            text = `👍 De ${submitter.username} findest Video "${video.title}" geil`
+            text = `De ${submitter.username} findest Video "${video.title}" geil`;
+            icon = "thumb_up"
         } else {
-            text = `👎 De ${submitter.username} findest Video "${video.title}"  nömme so geil`
+            text = `De ${submitter.username} findest Video "${video.title}"  nömme so geil`
+            icon = "thumb_down"
         }
 
-        setTimeout(function() { text = undefined }, 5000);
+        setTimeout(function () {
+            text = undefined
+        }, 5000);
     }
 
     onMount(async () => {
@@ -37,32 +42,9 @@
     });
 </script>
 
-<div>
-    {#if text}
-
-        <p>{text}<span on:click={() => text = undefined}>x</span></p>
-    {/if}
-</div>
-
-<style>
-    div {
-        z-index: 1;
-        position: fixed;
-        bottom: 0;
-        box-sizing: border-box;
-        width: min(70ch, calc(100% - 2.5rem));
-        background-color: rgba(112, 102, 102, 0.95);
-        margin-right: 1rem;
-    }
-
-    p {
-        margin: 0.3rem 0 0 1rem;
-        color: white;
-    }
-    span {
-        cursor: pointer;
-        padding: .3rem;
-        float: right;
-        margin-top: -1rem;
-    }
-</style>
+{#if text}
+    <div class="active toast blue white-text" on:click={() => text = undefined}>
+        <i>{icon}</i>
+        <span>{text}</span>
+    </div>
+{/if}

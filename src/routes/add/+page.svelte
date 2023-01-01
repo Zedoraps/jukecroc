@@ -60,6 +60,7 @@
         } else {
             preview = null;
             loading = false;
+            title = null;
         }
     }
 
@@ -70,25 +71,25 @@
 {#if $currentUser?.whitelisted}
     <form method="post" on:submit|preventDefault>
 
-        <div class="field label prefix large border" class:invalid="{previewError}">
+
+        <p>Youtube URI 🎬</p>
+        <div class="field prefix large border" class:invalid="{previewError}">
             <i>search</i>
             <input type="url" name="uri" bind:value={uri} on:input={setPreviewUri}>
-            <label>Youtube URI 🎬</label>
             {#if previewError}
                 <span class="error">Das Video hani ned chöne fende </span>
             {/if}
         </div>
+        <p>Titel</p>
         {#if loading}
             <div class="field prefix large border">
                 <a class="loader"></a>
                 <input type="text">
-                <label>Titel</label>
             </div>
         {:else }
-            <div class="field label prefix large border">
+            <div class="field prefix large border">
                 <i>drive_file_rename_outline</i>
                 <input type="text" bind:value={title} disabled="{!preview || previewError}">
-                <label>Titel</label>
             </div>
         {/if}
 

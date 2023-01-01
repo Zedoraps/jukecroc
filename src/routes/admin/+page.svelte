@@ -33,7 +33,7 @@
 {#if $currentUser?.admin}
     <h1>Admin</h1>
     <h2>Videos</h2>
-    <table class="border medium-space">
+    <table class="border medium-space scroll">
         <thead>
         <tr>
             <th>ID</th>
@@ -54,7 +54,7 @@
                 <td>{$likes?.filter(like => like.video === video.id)?.length}</td>
                 <td>
                     <nav class="right-align">
-                        <button class="none m l" on:click={deleteVideo(video.id)}>Lösche</button>
+                        <button class="none" on:click={deleteVideo(video.id)}>Lösche</button>
                     </nav>
                 </td>
             </tr>
@@ -64,7 +64,7 @@
 
     <h2>Users</h2>
     <button on:click={loadUsers}>Refresh</button>
-    <table class="border medium-space">
+    <table class="border medium-space scroll">
         <thead>
         <tr>
             <th>ID</th>
@@ -87,14 +87,14 @@
 
                 <td>
                     {#if user.whitelisted}
-                        <button on:click={whitelist(user.id, false)}>Un-Whitelist</button>
+                        <button class="none" on:click={whitelist(user.id, false)}>Un-Whitelist</button>
                     {:else}
-                        <button on:click={whitelist(user.id, true)}>Whitelist</button>
+                        <button class="none" on:click={whitelist(user.id, true)}>Whitelist</button>
                     {/if}
                 </td>
 
                 <td>
-                    <button class="none m l" on:click={deleteUser(user.id)}>Lösche</button>
+                    <button class="none" on:click={deleteUser(user.id)}>Lösche</button>
                 </td>
         {/each}
         </tbody>
@@ -104,13 +104,7 @@
 {/if}
 
 <style>
-    .users {
-        border: 1px black solid;
-        margin: 0.3rem;
-        padding: 0.5rem;
-    }
-
-    p {
-        margin: 0.3rem;
-    }
+   table {
+       display: block;
+   }
 </style>
