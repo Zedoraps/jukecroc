@@ -1,5 +1,5 @@
 <script>
-    import {pb} from "$lib/pocketbase";
+    import {loadVideosBySort, pb} from "$lib/pocketbase";
     import {onMount} from "svelte";
     import {goto} from "$app/navigation";
 
@@ -33,6 +33,7 @@
             result = authData
             username = authData?.record?.username;
             if (username) {
+                loadVideosBySort("-created", false);
                 if (username.startsWith("users")) {
                     goto("/user")
                 } else {
