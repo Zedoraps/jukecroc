@@ -12,6 +12,9 @@
         if (action === 'create') {
             text = `De ${submitter.username} het s'Video "${record.title}" hinzuegfüegt`
             icon = "add_circle"
+        } else if (action === "update") {
+            text = `"${record.title}" esch updated worde`
+            icon = "update_circle"
         } else {
             text = `"${record.title}" esch glöscht worde`
             icon = "delete"
@@ -31,6 +34,18 @@
                     const submitter = await pb.collection('users').getOne(record.submitter);
                     record.expand = {submitter};
                     videos.set([record, ...$videos])
+                }
+                if (action === 'update') {
+                    // Fetch associated user
+                    const submitter = await pb.collection('users').getOne(record.submitter);
+                    record.expand = {submitter};
+                    const result = $videos.map(element => {
+                        if (element.id === record.id) {
+                            return record;
+                        }
+                        return element;
+                    })
+                    videos.set(result)
                 }
                 if (action === 'delete') {
                     videos.set($videos.filter((m) => m.id !== record.id));

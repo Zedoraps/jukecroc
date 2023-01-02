@@ -1,7 +1,13 @@
 <script>
-    import {currentUser, likes, pb, videos} from "$lib/pocketbase";
+    import {currentUser, likes, loadVideosBySort, pb, videos} from "$lib/pocketbase";
+    import {onMount} from "svelte";
 
     let users = [];
+
+    onMount(async () => {
+        loadVideosBySort("-created", true)
+        await loadUsers();
+    })
 
     async function loadUsers() {
         await pb.collection("users").getFullList().then(result => {
@@ -9,7 +15,6 @@
         })
     }
 
-    loadUsers()
 
     async function whitelist(id, value) {
         await pb.collection("users").update(id, {"whitelisted": value})
@@ -28,6 +33,12 @@
             pb.collection("videos").delete(id);
         }
     }
+
+    function added(id, b) {
+        pb.collection("videos").update(id, {
+            "added": b,
+        });
+    }
 </script>
 
 {#if $currentUser?.admin}
@@ -42,6 +53,7 @@
             <th>Submitter</th>
             <th>Likes</th>
             <th>Actions</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -52,6 +64,19 @@
                 <td>{video.uri}</td>
                 <td>{video.expand?.submitter?.username}</td>
                 <td>{$likes?.filter(like => like.video === video.id)?.length}</td>
+                {#if video.added}
+                    <td>
+                        <nav class="right-align">
+                            <button class="none" on:click={added(video.id, false)}>Remove from added</button>
+                        </nav>
+                    </td>
+                {:else }
+                    <td>
+                        <nav class="right-align">
+                            <button class="none" on:click={added(video.id, true)}>Mark as Added</button>
+                        </nav>
+                    </td>
+                {/if}
                 <td>
                     <nav class="right-align">
                         <button class="none" on:click={deleteVideo(video.id)}>Lösche</button>
@@ -104,7 +129,7 @@
 {/if}
 
 <style>
-   table {
-       display: block;
-   }
+    table {
+        display: block;
+    }
 </style>
